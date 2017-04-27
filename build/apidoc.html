@@ -3106,7 +3106,23 @@
 
   return node;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+this.preOrder(current.right, callback);
+};
+
+/**
+ * Finds a node by its value.
+ */
+AVLTree.prototype.find = function (value) {
+return this.<span class="apidocCodeKeywordSpan">_find</span>(value, this.root);
+};
+
+/**
+ * Finds a node by its value in the given sub-tree.
+ */
+AVLTree.prototype._find = function (value, current) {
+if (!current) {
+...</pre></li>
     </ul>
 
 
@@ -3130,7 +3146,23 @@
   }
   return this._findMax(node.right, current);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+};
+if (!node) {
+  return current;
+}
+if (current.value &#x3c; node.value) {
+  current = node;
+}
+return this.<span class="apidocCodeKeywordSpan">_findMax</span>(node.right, current);
+};
+
+/**
+ * Finds the node with minimum value in the whole tree.
+ */
+AVLTree.prototype.findMin = function () {
+return this._findMin(this.root);
+...</pre></li>
     </ul>
 
 
@@ -3154,7 +3186,23 @@
   }
   return this._findMin(node.left, current);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  };
+  if (!node) {
+    return current;
+  }
+  if (current.value &#x3e; node.value) {
+    current = node;
+  }
+  return this.<span class="apidocCodeKeywordSpan">_findMin</span>(node.left, current);
+};
+
+/**
+ * Finds the node with maximum value in the given
+ * sub-tree.
+ */
+AVLTree.prototype._findMax = function (node, current) {
+...</pre></li>
     </ul>
 
 
@@ -3169,7 +3217,23 @@
     <li>description and source-code<pre class="apidocCodePre">find = function (value) {
   return this._find(value, this.root);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+}
+};
+
+/**
+ * Removes a node by its value.
+ */
+AVLTree.prototype.remove = function (value) {
+var node = this.<span class="apidocCodeKeywordSpan">find</span>(value);
+if (!node) {
+  return false;
+}
+
+if (node.left &#x26;&#x26; node.right) {
+  var min = this.findMin(node.right);
+  var temp = node.value;
+...</pre></li>
     </ul>
 
 
@@ -3199,7 +3263,23 @@
     <li>description and source-code<pre class="apidocCodePre">findMin = function () {
   return this._findMin(this.root);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+AVLTree.prototype.remove = function (value) {
+var node = this.find(value);
+if (!node) {
+  return false;
+}
+
+if (node.left &#x26;&#x26; node.right) {
+  var min = this.<span class="apidocCodeKeywordSpan">findMin</span>(node.right);
+  var temp = node.value;
+  node.value = min.value;
+  min.value = temp;
+  return this.remove(min);
+} else if (node.left) {
+  this.replaceChild(node.parent, node, node.left);
+  this.keepHeightBalance(node.left, true);
+...</pre></li>
     </ul>
 
 
@@ -3222,7 +3302,23 @@
   }
   return height;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+ * root and checking for invalid heights.
+ */
+AVLTree.prototype.keepHeightBalance = function (node, afterRemove) {
+var current = node;
+var traveledNodes = [];
+while (current !== null) {
+  traveledNodes.push(current);
+  current.height = this.<span class="apidocCodeKeywordSpan">getNodeHeight</span>(current);
+  if (!this.isNodeBalanced(current)) {
+    var nodesToBeRestructured = (afterRemove) ?
+      this.getNodesToRestructureAfterRemove(traveledNodes) :
+      this.getNodesToRestructureAfterInsert(traveledNodes);
+    this.restructure(nodesToBeRestructured);
+  }
+  current = current.parent;
+...</pre></li>
     </ul>
 
 
@@ -3265,7 +3361,23 @@
   }
   return [x, y, z];
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  var traveledNodes = [];
+  while (current !== null) {
+    traveledNodes.push(current);
+    current.height = this.getNodeHeight(current);
+    if (!this.isNodeBalanced(current)) {
+      var nodesToBeRestructured = (afterRemove) ?
+        this.getNodesToRestructureAfterRemove(traveledNodes) :
+        this.<span class="apidocCodeKeywordSpan">getNodesToRestructureAfterInsert</span>(traveledNodes);
+      this.restructure(nodesToBeRestructured);
+    }
+    current = current.parent;
+  }
+};
+
+/**
+...</pre></li>
     </ul>
 
 
@@ -3312,7 +3424,22 @@
   }
   return [x, y, z];
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  var current = node;
+  var traveledNodes = [];
+  while (current !== null) {
+    traveledNodes.push(current);
+    current.height = this.getNodeHeight(current);
+    if (!this.isNodeBalanced(current)) {
+      var nodesToBeRestructured = (afterRemove) ?
+        this.<span class="apidocCodeKeywordSpan">getNodesToRestructureAfterRemove</span>(traveledNodes) :
+        this.getNodesToRestructureAfterInsert(traveledNodes);
+      this.restructure(nodesToBeRestructured);
+    }
+    current = current.parent;
+  }
+};
+...</pre></li>
     </ul>
 
 
@@ -3355,7 +3482,23 @@
   }
   this.inOrder(current.right, callback);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+/**
+ * In-order traversal from the given node.
+ */
+AVLTree.prototype.inOrder = function (current, callback) {
+  if (!current) {
+    return;
+  }
+  this.<span class="apidocCodeKeywordSpan">inOrder</span>(current.left, callback);
+  if (typeof callback === &#x27;function&#x27;) {
+    callback(current);
+  }
+  this.inOrder(current.right, callback);
+};
+
+/**
+...</pre></li>
     </ul>
 
 
@@ -3389,7 +3532,23 @@
     this.insert(value, current[insertKey]);
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    insertKey = &#x27;right&#x27;;
+  }
+
+  if (!current[insertKey]) {
+    current[insertKey] = new Node(value, null, null, current);
+    this.keepHeightBalance(current[insertKey], false);
+  } else {
+    this.<span class="apidocCodeKeywordSpan">insert</span>(value, current[insertKey]);
+  }
+};
+
+/**
+ * In-order traversal from the given node.
+ */
+AVLTree.prototype.inOrder = function (current, callback) {
+...</pre></li>
     </ul>
 
 
@@ -3413,7 +3572,23 @@
   }
   return isBalanced;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+ */
+AVLTree.prototype.keepHeightBalance = function (node, afterRemove) {
+var current = node;
+var traveledNodes = [];
+while (current !== null) {
+  traveledNodes.push(current);
+  current.height = this.getNodeHeight(current);
+  if (!this.<span class="apidocCodeKeywordSpan">isNodeBalanced</span>(current)) {
+    var nodesToBeRestructured = (afterRemove) ?
+      this.getNodesToRestructureAfterRemove(traveledNodes) :
+      this.getNodesToRestructureAfterInsert(traveledNodes);
+    this.restructure(nodesToBeRestructured);
+  }
+  current = current.parent;
+}
+...</pre></li>
     </ul>
 
 
@@ -3463,7 +3638,23 @@
     current = current.parent;
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+/**
+ * Inserts a value as a Node of an AVL Tree.
+ */
+AVLTree.prototype.insert = function (value, current) {
+if (this.root === null) {
+  this.root = new Node(value, null, null, null, 1);
+  this.<span class="apidocCodeKeywordSpan">keepHeightBalance</span>(this.root);
+  return;
+}
+
+var insertKey;
+current = current || this.root;
+if (current.value &#x3e; value) {
+  insertKey = &#x27;left&#x27;;
+...</pre></li>
     </ul>
 
 
@@ -3499,7 +3690,22 @@
   z.height = this.getNodeHeight(z);
   y.height = this.getNodeHeight(y);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  var y = nodesToRestructure[1];
+  var z = nodesToRestructure[2];
+
+  // Determine Rotation Pattern
+  if (z.right === y &#x26;&#x26; y.right === x) {
+    this.rightRight(x, y, z);
+  } else if (z.left === y &#x26;&#x26; y.left === x) {
+    this.<span class="apidocCodeKeywordSpan">leftLeft</span>(x, y, z);
+  } else if (z.right === y &#x26;&#x26; y.left === x) {
+    this.rightLeft(x, y, z);
+  } else if (z.left === y &#x26;&#x26; y.right === x) {
+    this.leftRight(x, y, z);
+  }
+};
+...</pre></li>
     </ul>
 
 
@@ -3543,7 +3749,23 @@
   z.height = this.getNodeHeight(z);
   x.height = this.getNodeHeight(x);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  if (z.right === y &#x26;&#x26; y.right === x) {
+    this.rightRight(x, y, z);
+  } else if (z.left === y &#x26;&#x26; y.left === x) {
+    this.leftLeft(x, y, z);
+  } else if (z.right === y &#x26;&#x26; y.left === x) {
+    this.rightLeft(x, y, z);
+  } else if (z.left === y &#x26;&#x26; y.right === x) {
+    this.<span class="apidocCodeKeywordSpan">leftRight</span>(x, y, z);
+  }
+};
+
+/**
+ * Right-right rotation pattern.
+ */
+AVLTree.prototype.rightRight = function (x, y, z) {
+...</pre></li>
     </ul>
 
 
@@ -3566,7 +3788,23 @@
     callback(current);
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+ * Post-order traversal from the given node.
+ */
+AVLTree.prototype.postOrder = function (current, callback) {
+  if (!current) {
+    return;
+  }
+
+  this.<span class="apidocCodeKeywordSpan">postOrder</span>(current.left, callback);
+  this.postOrder(current.right, callback);
+  if (typeof callback === &#x27;function&#x27;) {
+    callback(current);
+  }
+};
+
+/**
+...</pre></li>
     </ul>
 
 
@@ -3588,7 +3826,23 @@
   this.preOrder(current.left, callback);
   this.preOrder(current.right, callback);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+AVLTree.prototype.preOrder = function (current, callback) {
+  if (!current) {
+    return;
+  }
+  if (typeof callback === &#x27;function&#x27;) {
+    callback(current);
+  }
+  this.<span class="apidocCodeKeywordSpan">preOrder</span>(current.left, callback);
+  this.preOrder(current.right, callback);
+};
+
+/**
+ * Finds a node by its value.
+ */
+AVLTree.prototype.find = function (value) {
+...</pre></li>
     </ul>
 
 
@@ -3624,7 +3878,23 @@
   }
   return true;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+}
+
+if (node.left &#x26;&#x26; node.right) {
+  var min = this.findMin(node.right);
+  var temp = node.value;
+  node.value = min.value;
+  min.value = temp;
+  return this.<span class="apidocCodeKeywordSpan">remove</span>(min);
+} else if (node.left) {
+  this.replaceChild(node.parent, node, node.left);
+  this.keepHeightBalance(node.left, true);
+} else if (node.right) {
+  this.replaceChild(node.parent, node, node.right);
+  this.keepHeightBalance(node.right, true);
+} else {
+...</pre></li>
     </ul>
 
 
@@ -3653,7 +3923,23 @@
     }
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+if (node.left &#x26;&#x26; node.right) {
+  var min = this.findMin(node.right);
+  var temp = node.value;
+  node.value = min.value;
+  min.value = temp;
+  return this.remove(min);
+} else if (node.left) {
+  this.<span class="apidocCodeKeywordSpan">replaceChild</span>(node.parent, node, node.left);
+  this.keepHeightBalance(node.left, true);
+} else if (node.right) {
+  this.replaceChild(node.parent, node, node.right);
+  this.keepHeightBalance(node.right, true);
+} else {
+  this.replaceChild(node.parent, node, null);
+  this.keepHeightBalance(node.parent, true);
+...</pre></li>
     </ul>
 
 
@@ -3681,7 +3967,23 @@
     this.leftRight(x, y, z);
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+ while (current !== null) {
+   traveledNodes.push(current);
+   current.height = this.getNodeHeight(current);
+   if (!this.isNodeBalanced(current)) {
+     var nodesToBeRestructured = (afterRemove) ?
+       this.getNodesToRestructureAfterRemove(traveledNodes) :
+       this.getNodesToRestructureAfterInsert(traveledNodes);
+     this.<span class="apidocCodeKeywordSpan">restructure</span>(nodesToBeRestructured);
+   }
+   current = current.parent;
+ }
+};
+
+/**
+* Identifies and calls the appropriate pattern
+...</pre></li>
     </ul>
 
 
@@ -3725,7 +4027,23 @@
   z.height = this.getNodeHeight(z);
   x.height = this.getNodeHeight(x);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+ // Determine Rotation Pattern
+ if (z.right === y &#x26;&#x26; y.right === x) {
+   this.rightRight(x, y, z);
+ } else if (z.left === y &#x26;&#x26; y.left === x) {
+   this.leftLeft(x, y, z);
+ } else if (z.right === y &#x26;&#x26; y.left === x) {
+   this.<span class="apidocCodeKeywordSpan">rightLeft</span>(x, y, z);
+ } else if (z.left === y &#x26;&#x26; y.right === x) {
+   this.leftRight(x, y, z);
+ }
+};
+
+/**
+* Right-right rotation pattern.
+...</pre></li>
     </ul>
 
 
@@ -3762,7 +4080,23 @@
   z.height = this.getNodeHeight(z);
   y.height = this.getNodeHeight(y);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+AVLTree.prototype.restructure = function (nodesToRestructure) {
+var x = nodesToRestructure[0];
+var y = nodesToRestructure[1];
+var z = nodesToRestructure[2];
+
+// Determine Rotation Pattern
+if (z.right === y &#x26;&#x26; y.right === x) {
+  this.<span class="apidocCodeKeywordSpan">rightRight</span>(x, y, z);
+} else if (z.left === y &#x26;&#x26; y.left === x) {
+  this.leftLeft(x, y, z);
+} else if (z.right === y &#x26;&#x26; y.left === x) {
+  this.rightLeft(x, y, z);
+} else if (z.left === y &#x26;&#x26; y.right === x) {
+  this.leftRight(x, y, z);
+}
+...</pre></li>
     </ul>
 
 
@@ -3827,7 +4161,23 @@
   if (this._comparator.greaterThan(e, root.value))
     return root.right &#x26;&#x26; this._find(e, root.right);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+this.preOrder(current.right, callback);
+};
+
+/**
+ * Finds a node by its value.
+ */
+AVLTree.prototype.find = function (value) {
+return this.<span class="apidocCodeKeywordSpan">_find</span>(value, this.root);
+};
+
+/**
+ * Finds a node by its value in the given sub-tree.
+ */
+AVLTree.prototype._find = function (value, current) {
+if (!current) {
+...</pre></li>
     </ul>
 
 
@@ -3846,7 +4196,23 @@
   }
   return minNode;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  };
+  if (!node) {
+    return current;
+  }
+  if (current.value &#x3e; node.value) {
+    current = node;
+  }
+  return this.<span class="apidocCodeKeywordSpan">_findMin</span>(node.left, current);
+};
+
+/**
+ * Finds the node with maximum value in the given
+ * sub-tree.
+ */
+AVLTree.prototype._findMax = function (node, current) {
+...</pre></li>
     </ul>
 
 
@@ -3868,7 +4234,21 @@
     this.root = newNode;
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    node.value = successor.value;
+  } else {
+    /**
+     * If the node is a leaf, just make the parent point to null,
+     * and if it has one child, make the parent point to this child
+     * instead
+     */
+    this.<span class="apidocCodeKeywordSpan">_replaceNodeInParent</span>(node, node.left || node.right);
+    this._size--;
+  }
+};
+
+module.exports = BST;
+...</pre></li>
     </ul>
 
 
@@ -3883,7 +4263,23 @@
     <li>description and source-code<pre class="apidocCodePre">contains = function (e) {
   return !!this._find(e);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+// Normalize vertex labels as strings
+var _ = function (v) {
+  return &#x27;&#x27; + v;
+};
+
+Graph.prototype.addVertex = function (v) {
+  v = _(v);
+  if (this.vertices.<span class="apidocCodeKeywordSpan">contains</span>(v)) {
+    throw new Error(&#x27;Vertex &#x22;&#x27; + v + &#x27;&#x22; has already been added&#x27;);
+  }
+  this.vertices.add(v);
+  this.adjList[v] = Object.create(null);
+};
+
+Graph.prototype.addEdge = function (a, b, w) {
+...</pre></li>
     </ul>
 
 
@@ -3915,7 +4311,23 @@
     this._size++;
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    insertKey = &#x27;right&#x27;;
+  }
+
+  if (!current[insertKey]) {
+    current[insertKey] = new Node(value, null, null, current);
+    this.keepHeightBalance(current[insertKey], false);
+  } else {
+    this.<span class="apidocCodeKeywordSpan">insert</span>(value, current[insertKey]);
+  }
+};
+
+/**
+ * In-order traversal from the given node.
+ */
+AVLTree.prototype.inOrder = function (current, callback) {
+...</pre></li>
     </ul>
 
 
@@ -3952,7 +4364,23 @@
     this._size--;
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+}
+
+if (node.left &#x26;&#x26; node.right) {
+  var min = this.findMin(node.right);
+  var temp = node.value;
+  node.value = min.value;
+  min.value = temp;
+  return this.<span class="apidocCodeKeywordSpan">remove</span>(min);
+} else if (node.left) {
+  this.replaceChild(node.parent, node, node.left);
+  this.keepHeightBalance(node.left, true);
+} else if (node.right) {
+  this.replaceChild(node.parent, node, node.right);
+  this.keepHeightBalance(node.right, true);
+} else {
+...</pre></li>
     </ul>
 
 
@@ -3998,7 +4426,22 @@
     this._sizes[element] = 1;
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+ * Check if the elements belong to the same subset.
+ * Complexity: O(A^-1) (inverse Ackermann function) amortized.
+ *
+ * @param {...*} element
+ * @return {boolean}
+ */
+DisjointSetForest.prototype.sameSubset = function (element) {
+  this.<span class="apidocCodeKeywordSpan">_introduce</span>(element);
+  var root = this.root(element);
+  return [].slice.call(arguments, 1).every(function (element) {
+    this._introduce(element);
+    return this.root(element) === root;
+  }.bind(this));
+};
+...</pre></li>
     </ul>
 
 
@@ -4033,7 +4476,21 @@
   }
   return this;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  });
+
+  edges.sort(function (a, b) {
+    return a.weight - b.weight;
+  }).forEach(function (edge) {
+    if (!connectedComponents.sameSubset(edge.ends[0], edge.ends[1])) {
+      mst.addEdge(edge.ends[0], edge.ends[1], edge.weight);
+      connectedComponents.<span class="apidocCodeKeywordSpan">merge</span>(edge.ends[0], edge.ends[1]);
+    }
+  });
+
+  return mst;
+};
+...</pre></li>
     </ul>
 
 
@@ -4052,7 +4509,21 @@
   }
   return this._parents[element];
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+ * Complexity: O(A^-1) (inverse Ackermann function) amortized.
+ *
+ * @param {...*} element
+ * @return {boolean}
+ */
+DisjointSetForest.prototype.sameSubset = function (element) {
+  this._introduce(element);
+  var root = this.<span class="apidocCodeKeywordSpan">root</span>(element);
+  return [].slice.call(arguments, 1).every(function (element) {
+    this._introduce(element);
+    return this.root(element) === root;
+  }.bind(this));
+};
+...</pre></li>
     </ul>
 
 
@@ -4072,7 +4543,23 @@
     return this.root(element) === root;
   }.bind(this));
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+      }
+    });
+  });
+
+  edges.sort(function (a, b) {
+    return a.weight - b.weight;
+  }).forEach(function (edge) {
+    if (!connectedComponents.<span class="apidocCodeKeywordSpan">sameSubset</span>(edge.ends[0], edge.ends[1])) {
+      mst.addEdge(edge.ends[0], edge.ends[1], edge.weight);
+      connectedComponents.merge(edge.ends[0], edge.ends[1]);
+    }
+  });
+
+  return mst;
+};
+...</pre></li>
     </ul>
 
 
@@ -4088,7 +4575,23 @@
   this._introduce(element);
   return this._sizes[this.root(element)];
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+      assert(!forest.sameSubset(1, 5));
+    });
+
+it(&#x27;should maintain subset sizes&#x27;, function () {
+  var forest = new DisjointSetForest();
+  var assertSizesCorrect = function (elements, size) {
+    elements.forEach(function (element) {
+      assert.equal(forest.<span class="apidocCodeKeywordSpan">size</span>(element), size);
+    });
+  };
+  assertSizesCorrect([0, 1, 2, 3, 4], 1);
+  forest.merge(0, 1);
+  assertSizesCorrect([0, 1], 2);
+  forest.merge(0, 2);
+  assertSizesCorrect([0, 1, 2], 3);
+...</pre></li>
     </ul>
 
 
@@ -4147,7 +4650,23 @@
 </span>  for (; index &#x3c; this._elements.length ; index += (index&#x26;-index))
     this._elements[index] += value;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+var FenwickTree = require(&#x27;../..&#x27;).DataStructures.FenwickTree,
+assert = require(&#x27;assert&#x27;);
+
+describe(&#x27;FenwickTree&#x27;, function () {
+  it(&#x27;should allow prefix queries&#x27;, function () {
+var tree = new FenwickTree(10);
+tree.<span class="apidocCodeKeywordSpan">adjust</span>(5, 42);
+tree.adjust(7, 43);
+tree.adjust(9, 44);
+
+
+assert.equal(tree.prefixSum(0), 0);
+assert.equal(tree.prefixSum(1), 0);
+assert.equal(tree.prefixSum(2), 0);
+...</pre></li>
     </ul>
 
 
@@ -4180,7 +4699,19 @@
     sum += this._elements[index];
   return sum;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  return sum;
+};
+
+/**
+* Returns the sum of all values between two indexes in O(log n)
+*/
+FenwickTree.prototype.rangeSum = function (fromIndex, toIndex) {
+  return this.<span class="apidocCodeKeywordSpan">prefixSum</span>(toIndex) - this.prefixSum(fromIndex - 1);
+};
+
+module.exports = FenwickTree;
+...</pre></li>
     </ul>
 
 
@@ -4195,7 +4726,19 @@
     <li>description and source-code<pre class="apidocCodePre">rangeSum = function (fromIndex, toIndex) {
   return this.prefixSum(toIndex) - this.prefixSum(fromIndex - 1);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  it(&#x27;should allow range queries&#x27;, function () {
+    var tree = new FenwickTree(10);
+    tree.adjust(5, 42);
+    tree.adjust(7, 43);
+    tree.adjust(9, 44);
+
+
+    assert.equal(tree.<span class="apidocCodeKeywordSpan">rangeSum</span>(6, 10), 43 + 44);
+    assert.equal(tree.rangeSum(5, 7), 42 + 43);
+  });
+});
+...</pre></li>
     </ul>
 
 
@@ -4252,7 +4795,23 @@
     this.adjList[b][a] = (this.adjList[b][a] || 0) + w;
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+graph.vertices.forEach(seen.addVertex.bind(seen));
+
+depthFirstSearch(graph, endpoints.start, {
+  allowTraversal: function (vertex, neighbor) {
+    return !seen.edge(vertex, neighbor);
+  },
+  beforeTraversal: function (vertex, neighbor) {
+    seen.<span class="apidocCodeKeywordSpan">addEdge</span>(vertex, neighbor);
+  },
+  afterTraversal: function (vertex) {
+    route.push(vertex);
+  }
+});
+
+graph.vertices.forEach(function (vertex) {
+...</pre></li>
     </ul>
 
 
@@ -4272,7 +4831,23 @@
   this.vertices.add(v);
   this.adjList[v] = Object.create(null);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+Graph.prototype.addEdge = function (a, b, w) {
+a = _(a);
+b = _(b);
+// If no weight is assigned to the edge, 1 is the default
+w = (w === undefined ? 1 : w);
+
+if (!this.adjList[a]) this.<span class="apidocCodeKeywordSpan">addVertex</span>(a);
+if (!this.adjList[b]) this.addVertex(b);
+
+// If there&#x27;s already another edge with the same origin and destination
+// sum with the current one
+this.adjList[a][b] = (this.adjList[a][b] || 0) + w;
+
+// If the graph is not directed add the edge in both directions
+...</pre></li>
     </ul>
 
 
@@ -4287,7 +4862,22 @@
     <li>description and source-code<pre class="apidocCodePre">edge = function (a, b) {
   return this.adjList[_(a)][_(b)];
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+// Add all the edges from the graph to the &#x27;edges&#x27; array
+graph.vertices.forEach(function (s) {
+  graph.neighbors(s).forEach(function (t) {
+    edges.push({
+      source: s,
+      target: t,
+      weight: graph.<span class="apidocCodeKeywordSpan">edge</span>(s, t)
+    });
+  });
+
+  minDistance[s] = Infinity;
+  ++adjacencyListSize;
+});
+...</pre></li>
     </ul>
 
 
@@ -4302,7 +4892,22 @@
     <li>description and source-code<pre class="apidocCodePre">neighbors = function (v) {
   return Object.keys(this.adjList[_(v)]);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+var minDistance = {};
+var previousVertex = {};
+var edges = [];
+var adjacencyListSize = 0;
+
+// Add all the edges from the graph to the &#x27;edges&#x27; array
+graph.vertices.forEach(function (s) {
+  graph.<span class="apidocCodeKeywordSpan">neighbors</span>(s).forEach(function (t) {
+    edges.push({
+      source: s,
+      target: t,
+      weight: graph.edge(s, t)
+    });
+  });
+...</pre></li>
     </ul>
 
 
@@ -4359,7 +4964,23 @@
     node = node.next;
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+}
+return hash;
+};
+
+HashTable.prototype.get = function (key) {
+var i = this._position(key);
+var node;
+if ((node = this.<span class="apidocCodeKeywordSpan">_findInList</span>(this._table[i], key))) {
+  return node.value.v;
+}
+};
+
+HashTable.prototype.put = function (key, value) {
+var i = this._position(key);
+if (!this._table[i]) {
+...</pre></li>
     </ul>
 
 
@@ -4384,7 +5005,22 @@
     }
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  // if the key already exists in the list, replace
+  // by the current item
+  node.value = item;
+} else {
+  this._table[i].add(item);
+  this._items++;
+
+  if (this._items === this.capacity) this.<span class="apidocCodeKeywordSpan">_increaseCapacity</span>();
+}
+};
+
+HashTable.prototype.del = function (key) {
+var i = this._position(key);
+var node;
+...</pre></li>
     </ul>
 
 
@@ -4399,7 +5035,23 @@
     <li>description and source-code<pre class="apidocCodePre">_position = function (key) {
   return Math.abs(this.hash(key)) % this.capacity;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    hash = ((hash &#x3c;&#x3c; 5) - hash) + s.charCodeAt(i);
+    hash &#x26;= hash; // Keep it a 32bit int
+  }
+  return hash;
+};
+
+HashTable.prototype.get = function (key) {
+  var i = this.<span class="apidocCodeKeywordSpan">_position</span>(key);
+  var node;
+  if ((node = this._findInList(this._table[i], key))) {
+    return node.value.v;
+  }
+};
+
+HashTable.prototype.put = function (key, value) {
+...</pre></li>
     </ul>
 
 
@@ -4420,7 +5072,23 @@
     this._items--;
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+ * Pops the element in the beginning of the queue
+ */
+Queue.prototype.pop = function () {
+if (this.isEmpty()) {
+  throw new Error(&#x27;Empty queue&#x27;);
+}
+var e = this._elements.get(0);
+this._elements.<span class="apidocCodeKeywordSpan">del</span>(0);
+return e;
+};
+
+Queue.prototype.peek = function () {
+if (this.isEmpty()) {
+  throw new Error(&#x27;Empty queue&#x27;);
+}
+...</pre></li>
     </ul>
 
 
@@ -4445,7 +5113,23 @@
     }
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    node = node.next;
+  }
+}
+};
+
+HashTable.prototype.forEach = function (fn) {
+var applyFunction = function (linkedList) {
+  linkedList.<span class="apidocCodeKeywordSpan">forEach</span>(function (elem) {
+    fn(elem.k, elem.v);
+  });
+};
+
+for (var i = 0; i &#x3c; this._table.length; i++) {
+  if (this._table[i]) {
+    applyFunction(this._table[i]);
+...</pre></li>
     </ul>
 
 
@@ -4464,7 +5148,23 @@
     return node.value.v;
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+/**
+ * Pops the element in the beginning of the queue
+ */
+Queue.prototype.pop = function () {
+if (this.isEmpty()) {
+  throw new Error(&#x27;Empty queue&#x27;);
+}
+var e = this._elements.<span class="apidocCodeKeywordSpan">get</span>(0);
+this._elements.del(0);
+return e;
+};
+
+Queue.prototype.peek = function () {
+if (this.isEmpty()) {
+  throw new Error(&#x27;Empty queue&#x27;);
+...</pre></li>
     </ul>
 
 
@@ -4485,7 +5185,23 @@
   }
   return hash;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+if ((node = this._findInList(this._table[i], key))) {
+  this._table[i].delNode(node);
+  this._items--;
+}
+};
+
+HashTable.prototype._position = function (key) {
+return Math.abs(this.<span class="apidocCodeKeywordSpan">hash</span>(key)) % this.capacity;
+};
+
+HashTable.prototype._findInList = function (list, key) {
+var node = list &#x26;&#x26; list.head;
+while (node) {
+  if (node.value.k === key) return node;
+  node = node.next;
+...</pre></li>
     </ul>
 
 
@@ -4517,7 +5233,23 @@
     if (this._items === this.capacity) this._increaseCapacity();
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+var oldTable = this._table;
+this._table = new Array(2 * this.capacity);
+this._items = 0;
+
+for (var i = 0; i &#x3c; oldTable.length; i++) {
+  var node = oldTable[i] &#x26;&#x26; oldTable[i].head;
+  while (node) {
+    this.<span class="apidocCodeKeywordSpan">put</span>(node.value.k, node.value.v);
+    node = node.next;
+  }
+}
+};
+
+HashTable.prototype.forEach = function (fn) {
+var applyFunction = function (linkedList) {
+...</pre></li>
     </ul>
 
 
@@ -4539,7 +5271,23 @@
   MinHeap.call(this, compareFn);
   this._comparator.reverse();
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  // Make sure nothing was really removed
+  assert.equal(h.n, 6);
+});
+});
+
+describe(&#x27;Max Heap&#x27;, function () {
+it(&#x27;should always return the greatest element&#x27;, function () {
+  var h = new heap.<span class="apidocCodeKeywordSpan">MaxHeap</span>();
+  assert(h.isEmpty());
+  h.insert(10);
+  h.insert(2091);
+  h.insert(4);
+  h.insert(1);
+  h.insert(5);
+  h.insert(500);
+...</pre></li>
     </ul>
 
 
@@ -4561,7 +5309,23 @@
     }.bind(this)
   });
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+&#x27;use strict&#x27;;
+
+var heap = require(&#x27;../..&#x27;).DataStructures.Heap,
+  assert = require(&#x27;assert&#x27;);
+
+describe(&#x27;Min Heap&#x27;, function () {
+it(&#x27;should always return the lowest element&#x27;, function () {
+  var h = new heap.<span class="apidocCodeKeywordSpan">MinHeap</span>();
+  assert(h.isEmpty());
+  h.insert(10);
+  h.insert(2091);
+  h.insert(4);
+  h.insert(1);
+  h.insert(5);
+  h.insert(500);
+...</pre></li>
     </ul>
 
 
@@ -4592,7 +5356,23 @@
     this._swap(i, c);
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+ var element = this._elements[1];
+
+ // Get the one from the bottom in insert it on top
+ // If this isn&#x27;t already the last element
+ var last = this._elements.pop();
+ if (this.n) {
+   this._elements[1] = last;
+   this.<span class="apidocCodeKeywordSpan">_siftDown</span>();
+ }
+
+ return element;
+};
+
+/**
+* Sift up the last element
+...</pre></li>
     </ul>
 
 
@@ -4614,7 +5394,23 @@
     this._swap(parent, i);
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+MinHeap.prototype.isEmpty = function () {
+return this.n === 0;
+};
+
+MinHeap.prototype.insert = function (e) {
+this._elements.push(e);
+this.<span class="apidocCodeKeywordSpan">_siftUp</span>();
+};
+
+MinHeap.prototype.extract = function () {
+var element = this._elements[1];
+
+// Get the one from the bottom in insert it on top
+// If this isn&#x27;t already the last element
+...</pre></li>
     </ul>
 
 
@@ -4631,7 +5427,23 @@
   this._elements[a] = this._elements[b];
   this._elements[b] = tmp;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+MinHeap.prototype._siftUp = function () {
+ var i, parent;
+
+ for (i = this.n;
+     i &#x3e; 1 &#x26;&#x26; (parent = i &#x3e;&#x3e; 1) &#x26;&#x26; this._comparator.greaterThan(
+       this._elements[parent], this._elements[i]);
+     i = parent) {
+   this.<span class="apidocCodeKeywordSpan">_swap</span>(parent, i);
+ }
+};
+
+/**
+* Sifts down the first element
+* O(lg n)
+*/
+...</pre></li>
     </ul>
 
 
@@ -4656,7 +5468,23 @@
 
   return element;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+ var i;
+
+ for (i = 0; i &#x3c; this._elements.length; i++) {
+   elementsCopy.push(this._elements[i]);
+ }
+
+ for (i = this.n; i &#x3e; 0; i--) {
+   fn(this.<span class="apidocCodeKeywordSpan">extract</span>());
+ }
+
+ this._elements = elementsCopy;
+};
+
+/**
+* Max Heap, keeps the highest element always on top
+...</pre></li>
     </ul>
 
 
@@ -4685,7 +5513,23 @@
 
   this._elements = elementsCopy;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    node = node.next;
+  }
+}
+};
+
+HashTable.prototype.forEach = function (fn) {
+var applyFunction = function (linkedList) {
+  linkedList.<span class="apidocCodeKeywordSpan">forEach</span>(function (elem) {
+    fn(elem.k, elem.v);
+  });
+};
+
+for (var i = 0; i &#x3c; this._table.length; i++) {
+  if (this._table[i]) {
+    applyFunction(this._table[i]);
+...</pre></li>
     </ul>
 
 
@@ -4707,7 +5551,19 @@
     this._siftDown(i);
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+PriorityQueue.prototype.priority = function (item) {
+  return this._priority[item];
+};
+
+PriorityQueue.prototype.changePriority = function (item, priority) {
+  this._priority[item] = priority;
+  this.<span class="apidocCodeKeywordSpan">heapify</span>();
+};
+
+module.exports = PriorityQueue;
+...</pre></li>
     </ul>
 
 
@@ -4723,7 +5579,23 @@
   this._elements.push(e);
   this._siftUp();
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    insertKey = &#x27;right&#x27;;
+  }
+
+  if (!current[insertKey]) {
+    current[insertKey] = new Node(value, null, null, current);
+    this.keepHeightBalance(current[insertKey], false);
+  } else {
+    this.<span class="apidocCodeKeywordSpan">insert</span>(value, current[insertKey]);
+  }
+};
+
+/**
+ * In-order traversal from the given node.
+ */
+AVLTree.prototype.inOrder = function (current, callback) {
+...</pre></li>
     </ul>
 
 
@@ -4738,7 +5610,23 @@
     <li>description and source-code<pre class="apidocCodePre">isEmpty = function () {
   return this.n === 0;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  get: function () {
+    return this._elements.length;
+  }.bind(this)
+});
+}
+
+Queue.prototype.isEmpty = function () {
+return this._elements.<span class="apidocCodeKeywordSpan">isEmpty</span>();
+};
+
+/**
+ * Adds element to the end of the queue
+ */
+Queue.prototype.push = function (e) {
+this._elements.add(e);
+...</pre></li>
     </ul>
 
 
@@ -4821,7 +5709,23 @@
 
   this._length++;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+};
+
+Graph.prototype.addVertex = function (v) {
+v = _(v);
+if (this.vertices.contains(v)) {
+  throw new Error(&#x27;Vertex &#x22;&#x27; + v + &#x27;&#x22; has already been added&#x27;);
+}
+this.vertices.<span class="apidocCodeKeywordSpan">add</span>(v);
+this.adjList[v] = Object.create(null);
+};
+
+Graph.prototype.addEdge = function (a, b, w) {
+a = _(a);
+b = _(b);
+// If no weight is assigned to the edge, 1 is the default
+...</pre></li>
     </ul>
 
 
@@ -4840,7 +5744,23 @@
 
   this.delNode(this.getNode(index));
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+ * Pops the element in the beginning of the queue
+ */
+Queue.prototype.pop = function () {
+if (this.isEmpty()) {
+  throw new Error(&#x27;Empty queue&#x27;);
+}
+var e = this._elements.get(0);
+this._elements.<span class="apidocCodeKeywordSpan">del</span>(0);
+return e;
+};
+
+Queue.prototype.peek = function () {
+if (this.isEmpty()) {
+  throw new Error(&#x27;Empty queue&#x27;);
+}
+...</pre></li>
     </ul>
 
 
@@ -4868,7 +5788,23 @@
 
   this._length--;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+};
+
+HashTable.prototype.del = function (key) {
+  var i = this._position(key);
+  var node;
+
+  if ((node = this._findInList(this._table[i], key))) {
+    this._table[i].<span class="apidocCodeKeywordSpan">delNode</span>(node);
+    this._items--;
+  }
+};
+
+HashTable.prototype._position = function (key) {
+  return Math.abs(this.hash(key)) % this.capacity;
+};
+...</pre></li>
     </ul>
 
 
@@ -4887,7 +5823,23 @@
     node = node.next;
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    node = node.next;
+  }
+}
+};
+
+HashTable.prototype.forEach = function (fn) {
+var applyFunction = function (linkedList) {
+  linkedList.<span class="apidocCodeKeywordSpan">forEach</span>(function (elem) {
+    fn(elem.k, elem.v);
+  });
+};
+
+for (var i = 0; i &#x3c; this._table.length; i++) {
+  if (this._table[i]) {
+    applyFunction(this._table[i]);
+...</pre></li>
     </ul>
 
 
@@ -4902,7 +5854,23 @@
     <li>description and source-code<pre class="apidocCodePre">get = function (index) {
   return this.getNode(index).value;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+/**
+ * Pops the element in the beginning of the queue
+ */
+Queue.prototype.pop = function () {
+if (this.isEmpty()) {
+  throw new Error(&#x27;Empty queue&#x27;);
+}
+var e = this._elements.<span class="apidocCodeKeywordSpan">get</span>(0);
+this._elements.del(0);
+return e;
+};
+
+Queue.prototype.peek = function () {
+if (this.isEmpty()) {
+  throw new Error(&#x27;Empty queue&#x27;);
+...</pre></li>
     </ul>
 
 
@@ -4926,7 +5894,23 @@
 
   return node;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+      nextNode;
+
+  if (index === 0) {
+    // Insert in the beginning
+    nextNode = this.head;
+    this.head = node;
+  } else {
+    nextNode = this.<span class="apidocCodeKeywordSpan">getNode</span>(index);
+    prevNode = nextNode.prev;
+    prevNode.next = node;
+    node.prev = prevNode;
+  }
+  nextNode.prev = node;
+  node.next = nextNode;
+} else {
+...</pre></li>
     </ul>
 
 
@@ -4941,7 +5925,23 @@
     <li>description and source-code<pre class="apidocCodePre">isEmpty = function () {
   return this.length === 0;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  get: function () {
+    return this._elements.length;
+  }.bind(this)
+});
+}
+
+Queue.prototype.isEmpty = function () {
+return this._elements.<span class="apidocCodeKeywordSpan">isEmpty</span>();
+};
+
+/**
+ * Adds element to the end of the queue
+ */
+Queue.prototype.push = function (e) {
+this._elements.add(e);
+...</pre></li>
     </ul>
 
 
@@ -4993,7 +5993,23 @@
   this._priority[item] = priority;
   this.heapify();
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+});
+}
+
+PriorityQueue.prototype = new MinHeap();
+
+PriorityQueue.prototype.insert = function (item, priority) {
+if (this._priority[item] !== undefined) {
+  return this.<span class="apidocCodeKeywordSpan">changePriority</span>(item, priority);
+}
+this._priority[item] = priority;
+MinHeap.prototype.insert.call(this, item);
+};
+
+PriorityQueue.prototype.extract = function (withPriority) {
+var min = MinHeap.prototype.extract.call(this);
+...</pre></li>
     </ul>
 
 
@@ -5011,7 +6027,23 @@
     min &#x26;&#x26; {item: min, priority: this._priority[min]} :
     min;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+ var i;
+
+ for (i = 0; i &#x3c; this._elements.length; i++) {
+   elementsCopy.push(this._elements[i]);
+ }
+
+ for (i = this.n; i &#x3e; 0; i--) {
+   fn(this.<span class="apidocCodeKeywordSpan">extract</span>());
+ }
+
+ this._elements = elementsCopy;
+};
+
+/**
+* Max Heap, keeps the highest element always on top
+...</pre></li>
     </ul>
 
 
@@ -5030,7 +6062,23 @@
   this._priority[item] = priority;
   MinHeap.prototype.insert.call(this, item);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    insertKey = &#x27;right&#x27;;
+  }
+
+  if (!current[insertKey]) {
+    current[insertKey] = new Node(value, null, null, current);
+    this.keepHeightBalance(current[insertKey], false);
+  } else {
+    this.<span class="apidocCodeKeywordSpan">insert</span>(value, current[insertKey]);
+  }
+};
+
+/**
+ * In-order traversal from the given node.
+ */
+AVLTree.prototype.inOrder = function (current, callback) {
+...</pre></li>
     </ul>
 
 
@@ -5045,7 +6093,23 @@
     <li>description and source-code<pre class="apidocCodePre">priority = function (item) {
   return this._priority[item];
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+ * the heap operations are performed based on the priority of the element
+ * and not on the element itself
+ */
+function PriorityQueue(initialItems) {
+
+var self = this;
+MinHeap.call(this, function (a, b) {
+  return self.<span class="apidocCodeKeywordSpan">priority</span>(a) &#x3c; self.priority(b) ? -1 : 1;
+});
+
+this._priority = {};
+
+initialItems = initialItems || {};
+Object.keys(initialItems).forEach(function (item) {
+  self.insert(item, initialItems[item]);
+...</pre></li>
     </ul>
 
 
@@ -5095,7 +6159,23 @@
     <li>description and source-code<pre class="apidocCodePre">forEach = function (fn) {
   this._elements.forEach(fn);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    node = node.next;
+  }
+}
+};
+
+HashTable.prototype.forEach = function (fn) {
+var applyFunction = function (linkedList) {
+  linkedList.<span class="apidocCodeKeywordSpan">forEach</span>(function (elem) {
+    fn(elem.k, elem.v);
+  });
+};
+
+for (var i = 0; i &#x3c; this._table.length; i++) {
+  if (this._table[i]) {
+    applyFunction(this._table[i]);
+...</pre></li>
     </ul>
 
 
@@ -5110,7 +6190,23 @@
     <li>description and source-code<pre class="apidocCodePre">isEmpty = function () {
   return this._elements.isEmpty();
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  get: function () {
+    return this._elements.length;
+  }.bind(this)
+});
+}
+
+Queue.prototype.isEmpty = function () {
+return this._elements.<span class="apidocCodeKeywordSpan">isEmpty</span>();
+};
+
+/**
+ * Adds element to the end of the queue
+ */
+Queue.prototype.push = function (e) {
+this._elements.add(e);
+...</pre></li>
     </ul>
 
 
@@ -5129,7 +6225,23 @@
 
   return this._elements.get(0);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  assert(q.isEmpty());
+  assert.throws(function () { q.pop(); }, Error);
+});
+
+it(&#x27;should allow me to peek at the first element in&#x27; +
+  &#x27; line without popping it&#x27;, function () {
+    var q = new Queue();
+    assert.throws(function () { q.<span class="apidocCodeKeywordSpan">peek</span>(); }, Error); //Empty list
+    q.push(1);
+    q.push(2);
+    q.push(3);
+    assert.equal(q.peek(), 1);
+    assert.equal(q.peek(), 1);
+    q.pop();
+    assert.equal(q.peek(), 2);
+...</pre></li>
     </ul>
 
 
@@ -5149,7 +6261,23 @@
   this._elements.del(0);
   return e;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+};
+
+MinHeap.prototype.extract = function () {
+  var element = this._elements[1];
+
+  // Get the one from the bottom in insert it on top
+  // If this isn&#x27;t already the last element
+  var last = this._elements.<span class="apidocCodeKeywordSpan">pop</span>();
+  if (this.n) {
+    this._elements[1] = last;
+    this._siftDown();
+  }
+
+  return element;
+};
+...</pre></li>
     </ul>
 
 
@@ -5164,7 +6292,23 @@
     <li>description and source-code<pre class="apidocCodePre">push = function (e) {
   this._elements.add(e);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+ * Keep the height balance property by walking to
+ * root and checking for invalid heights.
+ */
+AVLTree.prototype.keepHeightBalance = function (node, afterRemove) {
+var current = node;
+var traveledNodes = [];
+while (current !== null) {
+  traveledNodes.<span class="apidocCodeKeywordSpan">push</span>(current);
+  current.height = this.getNodeHeight(current);
+  if (!this.isNodeBalanced(current)) {
+    var nodesToBeRestructured = (afterRemove) ?
+      this.getNodesToRestructureAfterRemove(traveledNodes) :
+      this.getNodesToRestructureAfterInsert(traveledNodes);
+    this.restructure(nodesToBeRestructured);
+  }
+...</pre></li>
     </ul>
 
 
@@ -5214,7 +6358,23 @@
   }
   return this;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+};
+
+Graph.prototype.addVertex = function (v) {
+v = _(v);
+if (this.vertices.contains(v)) {
+  throw new Error(&#x27;Vertex &#x22;&#x27; + v + &#x27;&#x22; has already been added&#x27;);
+}
+this.vertices.<span class="apidocCodeKeywordSpan">add</span>(v);
+this.adjList[v] = Object.create(null);
+};
+
+Graph.prototype.addEdge = function (a, b, w) {
+a = _(a);
+b = _(b);
+// If no weight is assigned to the edge, 1 is the default
+...</pre></li>
     </ul>
 
 
@@ -5229,7 +6389,23 @@
     <li>description and source-code<pre class="apidocCodePre">contains = function (e) {
   return this._elements.get(e) !== undefined;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+// Normalize vertex labels as strings
+var _ = function (v) {
+  return &#x27;&#x27; + v;
+};
+
+Graph.prototype.addVertex = function (v) {
+  v = _(v);
+  if (this.vertices.<span class="apidocCodeKeywordSpan">contains</span>(v)) {
+    throw new Error(&#x27;Vertex &#x22;&#x27; + v + &#x27;&#x22; has already been added&#x27;);
+  }
+  this.vertices.add(v);
+  this.adjList[v] = Object.create(null);
+};
+
+Graph.prototype.addEdge = function (a, b, w) {
+...</pre></li>
     </ul>
 
 
@@ -5244,7 +6420,23 @@
     <li>description and source-code<pre class="apidocCodePre">forEach = function (fn) {
   this._elements.forEach(fn);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    node = node.next;
+  }
+}
+};
+
+HashTable.prototype.forEach = function (fn) {
+var applyFunction = function (linkedList) {
+  linkedList.<span class="apidocCodeKeywordSpan">forEach</span>(function (elem) {
+    fn(elem.k, elem.v);
+  });
+};
+
+for (var i = 0; i &#x3c; this._table.length; i++) {
+  if (this._table[i]) {
+    applyFunction(this._table[i]);
+...</pre></li>
     </ul>
 
 
@@ -5262,7 +6454,23 @@
   }
   return this;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+}
+
+if (node.left &#x26;&#x26; node.right) {
+  var min = this.findMin(node.right);
+  var temp = node.value;
+  node.value = min.value;
+  min.value = temp;
+  return this.<span class="apidocCodeKeywordSpan">remove</span>(min);
+} else if (node.left) {
+  this.replaceChild(node.parent, node, node.left);
+  this.keepHeightBalance(node.left, true);
+} else if (node.right) {
+  this.replaceChild(node.parent, node, node.right);
+  this.keepHeightBalance(node.right, true);
+} else {
+...</pre></li>
     </ul>
 
 
@@ -5302,7 +6510,23 @@
     <li>description and source-code<pre class="apidocCodePre">push = function (e) {
   this._elements.add(e, 0);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+ * Keep the height balance property by walking to
+ * root and checking for invalid heights.
+ */
+AVLTree.prototype.keepHeightBalance = function (node, afterRemove) {
+var current = node;
+var traveledNodes = [];
+while (current !== null) {
+  traveledNodes.<span class="apidocCodeKeywordSpan">push</span>(current);
+  current.height = this.getNodeHeight(current);
+  if (!this.isNodeBalanced(current)) {
+    var nodesToBeRestructured = (afterRemove) ?
+      this.getNodesToRestructureAfterRemove(traveledNodes) :
+      this.getNodesToRestructureAfterInsert(traveledNodes);
+    this.restructure(nodesToBeRestructured);
+  }
+...</pre></li>
     </ul>
 
 
@@ -5355,7 +6579,23 @@
   var side = ~~(value &#x3e; node.value);
   return this._find(node.children[side], value);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+this.preOrder(current.right, callback);
+};
+
+/**
+ * Finds a node by its value.
+ */
+AVLTree.prototype.find = function (value) {
+return this.<span class="apidocCodeKeywordSpan">_find</span>(value, this.root);
+};
+
+/**
+ * Finds a node by its value in the given sub-tree.
+ */
+AVLTree.prototype._find = function (value, current) {
+if (!current) {
+...</pre></li>
     </ul>
 
 
@@ -5383,7 +6623,23 @@
 	return node.resize();
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+Treap.prototype._insert = function (node, value) {
+if (node === null) {
+  return new Node(value, null, null);
+}
+
+// Passing to childnodes and update
+var side = ~~(value &#x3e; node.value);
+node.children[side] = this.<span class="apidocCodeKeywordSpan">_insert</span>(node.children[side], value);
+
+// Keep it balance
+if (node.children[side].key &#x3c; node.key) {
+	return node.rotate(side);
+} else {
+	return node.resize();
+}
+...</pre></li>
     </ul>
 
 
@@ -5403,7 +6659,23 @@
 
   return Math.max(node.value, this._maximum(node.children[1]));
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+Treap.prototype._maximum = function (node) {
+if (node === null) {
+  // Empty tree, returns -Infinity
+  return -Infinity;
+}
+
+return Math.max(node.value, this.<span class="apidocCodeKeywordSpan">_maximum</span>(node.children[1]));
+};
+
+Treap.prototype._remove = function (node, value) {
+if (node === null) {
+  // Empty node, value not found
+  return null;
+}
+...</pre></li>
     </ul>
 
 
@@ -5423,7 +6695,23 @@
 
   return Math.min(node.value, this._minimum(node.children[0]));
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+Treap.prototype._minimum = function (node) {
+if (node === null) {
+  // Empty tree, returns Infinity
+  return Infinity;
+}
+
+return Math.min(node.value, this.<span class="apidocCodeKeywordSpan">_minimum</span>(node.children[0]));
+};
+
+Treap.prototype._maximum = function (node) {
+if (node === null) {
+  // Empty tree, returns -Infinity
+  return -Infinity;
+}
+...</pre></li>
     </ul>
 
 
@@ -5460,7 +6748,23 @@
   	return node.resize();
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+      // It&#x27;s a leaf, set to null
+      return null;
+    }
+
+	// Rotate to a subtree and remove it
+	side = (node.children[0] === null ? 1 : 0);
+	node = node.rotate(side);
+  	node.children[1 - side] = this.<span class="apidocCodeKeywordSpan">_remove</span>(node.children[1 - side], value);
+  	return node.resize();
+  } else {
+    side = ~~(value &#x3e; node.value);
+    node.children[side] = this._remove(node.children[side], value);
+  	return node.resize();
+  }
+};
+...</pre></li>
     </ul>
 
 
@@ -5475,7 +6779,23 @@
     <li>description and source-code<pre class="apidocCodePre">find = function (value) {
   return this._find(this.root, value);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+}
+};
+
+/**
+ * Removes a node by its value.
+ */
+AVLTree.prototype.remove = function (value) {
+var node = this.<span class="apidocCodeKeywordSpan">find</span>(value);
+if (!node) {
+  return false;
+}
+
+if (node.left &#x26;&#x26; node.right) {
+  var min = this.findMin(node.right);
+  var temp = node.value;
+...</pre></li>
     </ul>
 
 
@@ -5490,7 +6810,23 @@
     <li>description and source-code<pre class="apidocCodePre">height = function () {
   return this.root ? this.root.height : 0;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  it(&#x27;should keep balance&#x27;, function () {
+	// Insert 1023 elements randomly
+	for (var i = 0; i &#x3c; 1023; ++i) {
+	  treap.insert(Math.random());
+	}
+	assert.equal(treap.size(), 1023);
+	// The averange height should be 23 (with an error of 5)
+	assert(Math.abs(treap.<span class="apidocCodeKeywordSpan">height</span>() - 23) &#x3c; 5);
+  });
+
+  it(&#x27;should rotate correctly&#x27;, function () {
+  	// Force clear the tree
+	treap.root = null;
+treap.insert(1);
+// 1
+...</pre></li>
     </ul>
 
 
@@ -5505,7 +6841,23 @@
     <li>description and source-code<pre class="apidocCodePre">insert = function (value) {
   this.root = this._insert(this.root, value);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    insertKey = &#x27;right&#x27;;
+  }
+
+  if (!current[insertKey]) {
+    current[insertKey] = new Node(value, null, null, current);
+    this.keepHeightBalance(current[insertKey], false);
+  } else {
+    this.<span class="apidocCodeKeywordSpan">insert</span>(value, current[insertKey]);
+  }
+};
+
+/**
+ * In-order traversal from the given node.
+ */
+AVLTree.prototype.inOrder = function (current, callback) {
+...</pre></li>
     </ul>
 
 
@@ -5520,7 +6872,23 @@
     <li>description and source-code<pre class="apidocCodePre">maximum = function () {
   return this._maximum(this.root);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  treap.remove(-100);
+  // [2, 3, 10, 100]
+  assert.equal(treap.minimum(), 2);
+});
+
+it(&#x27;should get maximum element&#x27;, function () {
+  // [2, 3, 10, 100]
+  assert.equal(treap.<span class="apidocCodeKeywordSpan">maximum</span>(), 100);
+  treap.remove(100);
+  // [2, 3, 10]
+  assert.equal(treap.maximum(), 10);
+  treap.remove(10);
+  // [2, 3]
+  assert.equal(treap.maximum(), 3);
+  treap.remove(3);
+...</pre></li>
     </ul>
 
 
@@ -5535,7 +6903,23 @@
     <li>description and source-code<pre class="apidocCodePre">minimum = function () {
   return this._minimum(this.root);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  assert.equal(treap.find(-100), false);
+  assert.equal(treap.find(-1), false);
+  assert.equal(treap.find(101), false);
+});
+
+it(&#x27;should get minimum element&#x27;, function () {
+  // [1, 2, 3, 10, 100]
+  assert.equal(treap.<span class="apidocCodeKeywordSpan">minimum</span>(), 1);
+  treap.remove(1);
+  // [2, 3, 10, 100]
+  assert.equal(treap.minimum(), 2);
+  treap.insert(-100);
+  // [-100, 2, 3, 10, 100]
+  assert.equal(treap.minimum(), -100);
+  treap.remove(-100);
+...</pre></li>
     </ul>
 
 
@@ -5550,7 +6934,23 @@
     <li>description and source-code<pre class="apidocCodePre">remove = function (value) {
   this.root = this._remove(this.root, value);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+}
+
+if (node.left &#x26;&#x26; node.right) {
+  var min = this.findMin(node.right);
+  var temp = node.value;
+  node.value = min.value;
+  min.value = temp;
+  return this.<span class="apidocCodeKeywordSpan">remove</span>(min);
+} else if (node.left) {
+  this.replaceChild(node.parent, node, node.left);
+  this.keepHeightBalance(node.left, true);
+} else if (node.right) {
+  this.replaceChild(node.parent, node, node.right);
+  this.keepHeightBalance(node.right, true);
+} else {
+...</pre></li>
     </ul>
 
 
@@ -5565,7 +6965,23 @@
     <li>description and source-code<pre class="apidocCodePre">size = function () {
   return this.root ? this.root.size : 0;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+      assert(!forest.sameSubset(1, 5));
+    });
+
+it(&#x27;should maintain subset sizes&#x27;, function () {
+  var forest = new DisjointSetForest();
+  var assertSizesCorrect = function (elements, size) {
+    elements.forEach(function (element) {
+      assert.equal(forest.<span class="apidocCodeKeywordSpan">size</span>(element), size);
+    });
+  };
+  assertSizesCorrect([0, 1, 2, 3, 4], 1);
+  forest.merge(0, 1);
+  assertSizesCorrect([0, 1], 2);
+  forest.merge(0, 2);
+  assertSizesCorrect([0, 1, 2], 3);
+...</pre></li>
     </ul>
 
 
@@ -5673,7 +7089,23 @@
   }
   return res;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+/**
+ * Pops the element in the beginning of the queue
+ */
+Queue.prototype.pop = function () {
+if (this.isEmpty()) {
+  throw new Error(&#x27;Empty queue&#x27;);
+}
+var e = this._elements.<span class="apidocCodeKeywordSpan">get</span>(0);
+this._elements.del(0);
+return e;
+};
+
+Queue.prototype.peek = function () {
+if (this.isEmpty()) {
+  throw new Error(&#x27;Empty queue&#x27;);
+...</pre></li>
     </ul>
 
 
@@ -6599,7 +8031,23 @@
 
   return cache[number] = number * 3 + 1;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+var math = require(&#x27;../../..&#x27;).Math,
+  collatzConjecture = math.collatzConjecture,
+  assert = require(&#x27;assert&#x27;);
+
+describe(&#x27;Collatz Conjecture&#x27;, function () {
+it(&#x27;should return odd numbers divided by two&#x27;, function () {
+  assert.equal(collatzConjecture.<span class="apidocCodeKeywordSpan">calculate</span>(200), 100);
+  assert.equal(collatzConjecture.calculate(222), 111);
+  assert.equal(collatzConjecture.calculate(444), 222);
+});
+
+it(&#x27;should return even numbers multiplied by 3 + 1&#x27;, function () {
+  assert.equal(collatzConjecture.calculate(111), 334);
+  assert.equal(collatzConjecture.calculate(333), 1000);
+...</pre></li>
     </ul>
 
 
@@ -6621,7 +8069,18 @@
 
   return collatzConjecture;
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  it(&#x27;should return even numbers multiplied by 3 + 1&#x27;, function () {
+    assert.equal(collatzConjecture.calculate(111), 334);
+    assert.equal(collatzConjecture.calculate(333), 1000);
+    assert.equal(collatzConjecture.calculate(555), 1666);
+  });
+
+  it(&#x27;should return Collatz Conjecture sequence &#x27;, function () {
+    assert.deepEqual(collatzConjecture.<span class="apidocCodeKeywordSpan">generate</span>(10), [5, 16, 8, 4, 2, 1]);
+  });
+});
+...</pre></li>
     </ul>
 
 
@@ -6932,7 +8391,22 @@
     return powerSet;
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+assert(fourElementTest.length === 16);
+
+    });
+  });
+
+  describe(&#x27;#recursive()&#x27;, function () {
+    it(&#x27;should return the right elements of power set&#x27;, function () {
+var zeroElementTest = powerSet.<span class="apidocCodeKeywordSpan">recursive</span>([]);
+assert(zeroElementTest.length === 0);
+
+var oneElementTest = powerSet.recursive([0]);
+assert(testArrayInArray([], oneElementTest));
+assert(testArrayInArray([0], oneElementTest));
+assert(oneElementTest.length === 2);
+...</pre></li>
     </ul>
 
 
@@ -7102,7 +8576,23 @@
     callback(node.value);
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+ * Post-order traversal from the given node.
+ */
+AVLTree.prototype.postOrder = function (current, callback) {
+  if (!current) {
+    return;
+  }
+
+  this.<span class="apidocCodeKeywordSpan">postOrder</span>(current.left, callback);
+  this.postOrder(current.right, callback);
+  if (typeof callback === &#x27;function&#x27;) {
+    callback(current);
+  }
+};
+
+/**
+...</pre></li>
     </ul>
 
 
@@ -7121,7 +8611,23 @@
     preOrder(node.right, callback);
   }
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+AVLTree.prototype.preOrder = function (current, callback) {
+  if (!current) {
+    return;
+  }
+  if (typeof callback === &#x27;function&#x27;) {
+    callback(current);
+  }
+  this.<span class="apidocCodeKeywordSpan">preOrder</span>(current.left, callback);
+  this.preOrder(current.right, callback);
+};
+
+/**
+ * Finds a node by its value.
+ */
+AVLTree.prototype.find = function (value) {
+...</pre></li>
     </ul>
 
 
@@ -7747,7 +9253,23 @@
 
   return decodedLetters.join(&#x27;&#x27;);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  }
+  messages.push(characters.join(&#x27;&#x27;));
+}
+
+it(&#x27;should decode previously encoded messages correctly&#x27;, function () {
+  messages.forEach(function (message) {
+    var encoded = huffman.encode(message);
+    var decoded = huffman.<span class="apidocCodeKeywordSpan">decode</span>(encoded.encoding, encoded.value);
+    assert.equal(message, decoded);
+    var encodedCompressed = huffman.encode(message, true);
+    var decodedCompressed = huffman.decode(encodedCompressed.encoding,
+                                           encodedCompressed.value);
+    assert.equal(message, decodedCompressed);
+  });
+});
+...</pre></li>
     </ul>
 
 
@@ -7840,7 +9362,23 @@
     value: (compressed ? compress(result) : result)
   };
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+    characters.push(String.fromCharCode(charCode));
+  }
+  messages.push(characters.join(&#x27;&#x27;));
+}
+
+it(&#x27;should decode previously encoded messages correctly&#x27;, function () {
+  messages.forEach(function (message) {
+    var encoded = huffman.<span class="apidocCodeKeywordSpan">encode</span>(message);
+    var decoded = huffman.decode(encoded.encoding, encoded.value);
+    assert.equal(message, decoded);
+    var encodedCompressed = huffman.encode(message, true);
+    var decodedCompressed = huffman.decode(encodedCompressed.encoding,
+                                           encodedCompressed.value);
+    assert.equal(message, decodedCompressed);
+  });
+...</pre></li>
     </ul>
 
 
@@ -7946,21 +9484,21 @@ Comparator.prototype.greaterThanOrEqual = function (a, b) {
   return this.compare(a, b) &#x3e; 0;
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-};
 
-Comparator.prototype.greaterThan = function (a, b) {
-  return this.compare(a, b) &#x3e; 0;
-};
+  if (root.value === e)
+    return root;
 
-Comparator.prototype.greaterThanOrEqual = function (a, b) {
-  return this.<span class="apidocCodeKeywordSpan">greaterThan</span>(a, b) || this.equal(a, b);
-};
+  if (this._comparator.lessThan(e, root.value))
+    return root.left &#x26;&#x26; this._find(e, root.left);
 
-Comparator.prototype.equal = function (a, b) {
-  return this.compare(a, b) === 0;
+  if (this._comparator.<span class="apidocCodeKeywordSpan">greaterThan</span>(e, root.value))
+    return root.right &#x26;&#x26; this._find(e, root.right);
 };
 
 /**
+ * Substitute two nodes
+ */
+BST.prototype._replaceNodeInParent = function (currNode, newNode) {
 ...</pre></li>
     </ul>
 
@@ -7976,7 +9514,23 @@ Comparator.prototype.equal = function (a, b) {
     <li>description and source-code<pre class="apidocCodePre">greaterThanOrEqual = function (a, b) {
   return this.greaterThan(a, b) || this.equal(a, b);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+if (!array.length) {
+  return false;
+}
+var cmp = new Comparator(compareFn);
+
+// Find pivot and successor indices.
+var pivot = array.length - 1;
+while (pivot &#x26;&#x26; cmp.<span class="apidocCodeKeywordSpan">greaterThanOrEqual</span>(array[pivot - 1], array[pivot])) {
+  pivot -= 1;
+}
+if (!pivot) {
+  // Permutation is sorted in descending order.
+  return false;
+}
+var pivotValue = array[--pivot];
+...</pre></li>
     </ul>
 
 
@@ -7992,21 +9546,22 @@ Comparator.prototype.equal = function (a, b) {
   return this.compare(a, b) &#x3c; 0;
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-};
+      this.root = new Node(value);
+      this._size++;
+      return;
+    }
+    parent = this.root;
+  }
 
-Comparator.prototype.lessThan = function (a, b) {
-  return this.compare(a, b) &#x3c; 0;
+  var child = this._comparator.<span class="apidocCodeKeywordSpan">lessThan</span>(value, parent.value) ? &#x27;left&#x27; : &#x27
+;right&#x27;;
+  if (parent[child]) {
+    this.insert(value, parent[child]);
+  } else {
+    parent[child] = new Node(value, parent);
+    this._size++;
+  }
 };
-
-Comparator.prototype.lessThanOrEqual = function (a, b) {
-  return this.<span class="apidocCodeKeywordSpan">lessThan</span>(a, b) || this.equal(a, b);
-};
-
-Comparator.prototype.greaterThan = function (a, b) {
-  return this.compare(a, b) &#x3e; 0;
-};
-
-Comparator.prototype.greaterThanOrEqual = function (a, b) {
 ...</pre></li>
     </ul>
 
@@ -8022,7 +9577,22 @@ Comparator.prototype.greaterThanOrEqual = function (a, b) {
     <li>description and source-code<pre class="apidocCodePre">lessThanOrEqual = function (a, b) {
   return this.lessThan(a, b) || this.equal(a, b);
 }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+}
+if (!pivot) {
+  // Permutation is sorted in descending order.
+  return false;
+}
+var pivotValue = array[--pivot];
+var successor = array.length - 1;
+while (cmp.<span class="apidocCodeKeywordSpan">lessThanOrEqual</span>(array[successor], pivotValue)) {
+  successor -= 1;
+}
+
+// Swap values.
+array[pivot] = array[successor];
+array[successor] = pivotValue;
+...</pre></li>
     </ul>
 
 
@@ -8041,21 +9611,21 @@ Comparator.prototype.greaterThanOrEqual = function (a, b) {
   };
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-Comparator.prototype.equal = function (a, b) {
-return this.compare(a, b) === 0;
-};
-
-/**
- * Reverse the comparison function to use the opposite logic, e.g:
- * this.compare(a, b) =&#x3e; 1
- * this.<span class="apidocCodeKeywordSpan">reverse</span>();
- * this.compare(a, b) =&#x3e; -1
+ *
+ * To avoid code repetition, the Min Heap is used just with
+ * a reverse comparator;
  */
-Comparator.prototype.reverse = function () {
-var originalCompareFn = this.compare;
-this.compare = function (a, b) {
-  return originalCompareFn(b, a);
-};
+function MaxHeap(compareFn) {
+
+MinHeap.call(this, compareFn);
+this._comparator.<span class="apidocCodeKeywordSpan">reverse</span>();
+}
+
+MaxHeap.prototype = new MinHeap();
+
+module.exports = {
+MinHeap: MinHeap,
+MaxHeap: MaxHeap
 ...</pre></li>
     </ul>
 
