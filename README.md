@@ -1,6 +1,6 @@
 # npmdoc-algorithms
 
-#### api documentation for  [algorithms (v0.10.0)](https://github.com/felipernb/algorithms.js/wiki)  [![npm package](https://img.shields.io/npm/v/npmdoc-algorithms.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-algorithms) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-algorithms.svg)](https://travis-ci.org/npmdoc/node-npmdoc-algorithms)
+#### basic api documentation for  [algorithms (v0.10.0)](https://github.com/felipernb/algorithms.js/wiki)  [![npm package](https://img.shields.io/npm/v/npmdoc-algorithms.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-algorithms) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-algorithms.svg)](https://travis-ci.org/npmdoc/node-npmdoc-algorithms)
 
 #### Traditional computer science algorithms and data structures implemented in JavaScript
 
@@ -120,7 +120,8 @@
         "lint": "eslint src/",
         "test": "mocha -R spec --recursive src/test"
     },
-    "version": "0.10.0"
+    "version": "0.10.0",
+    "bin": {}
 }
 ```
 
